@@ -5,10 +5,20 @@ require("dotenv").config();
 const app = express();
 const port = process.env.PORT;
 app.use(express.static("public"));
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+
+app.set("view engine", "ejs");
 
 app.get("/", function(req, res) {
-  res.send("Hello");
+  const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  let today = new Date();
+  let currentDay = today.getDay();
+
+  res.render("list", {
+    kindOfDay: weekdays[currentDay]
+  });
 });
 
 app.listen(port, function() {
