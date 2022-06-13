@@ -11,6 +11,7 @@ app.use(bodyParser.urlencoded({
 app.set("view engine", "ejs");
 
 let items = ["Buy Food", "Cook Food", "Eat Food"];
+let workItems = [];
 
 app.get("/", function(req, res) {
   let today = new Date();
@@ -22,14 +23,23 @@ app.get("/", function(req, res) {
   let day = today.toLocaleDateString("en-US", options);
 
   res.render("list", {
-    kindOfDay: day,
+    listTitle: day,
     listItems: items
   });
 });
 
+app.get("/work", function(req, res) {
+  res.render("list", {listTitle: "Work List", listItems: workItems})
+});
+
 app.post("/", function(req, res) {
-  items.push(req.body.newItem);
-  res.redirect("/");
+  if (req.body.list === "Work") {
+    workItems.push(req.body.newItem);
+    res.redirect("/work");
+  } else {
+    items.push(req.body.newItem);
+    res.redirect("/");
+  }
 });
 
 app.listen(port, function() {
