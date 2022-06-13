@@ -7,12 +7,18 @@
 </head>
 
 <body>
+  <h1> <%= kindOfDay %> </h1>
 
-<% if (kindOfDay === "Saturday" || kindOfDay === "Sunday") { %>
-  <h1 style="color: purple">It's a <%= kindOfDay %>!</h1>
-<% } else { %>
-  <h1 style="color: blue">It's a <%= kindOfDay %>!</h1>
-<% } %>
+  <ul>
+    <% for (item of listItems) { %>
+    <li> <%- item %> </li>
+    <% } %>
+
+    <form action="/" method="post">
+      <input type="text" name="newItem">
+      <button type="submit" name="button">Add</button>
+    </form>
+  </ul>
 
 </body>
 

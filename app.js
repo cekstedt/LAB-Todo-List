@@ -8,17 +8,28 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({
   extended: true
 }));
-
 app.set("view engine", "ejs");
 
+let items = ["Buy Food", "Cook Food", "Eat Food"];
+
 app.get("/", function(req, res) {
-  const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   let today = new Date();
-  let currentDay = today.getDay();
+  let options = {
+    weekday: "long",
+    day: "numeric",
+    month: "long"
+  }
+  let day = today.toLocaleDateString("en-US", options);
 
   res.render("list", {
-    kindOfDay: weekdays[currentDay]
+    kindOfDay: day,
+    listItems: items
   });
+});
+
+app.post("/", function(req, res) {
+  items.push(req.body.newItem);
+  res.redirect("/");
 });
 
 app.listen(port, function() {
