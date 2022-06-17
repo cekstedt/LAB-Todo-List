@@ -89,13 +89,19 @@ app.get("/:listName", function(req, res) {
 // Post routes.
 
 app.post("/", function(req, res) {
-  if (req.body.list === "Work") {
-    workItems.push(req.body.newItem);
-    res.redirect("/work");
-  } else {
-    const newItem = new Item({ name: req.body.newItem });
+  const itemName = req.body.newItem;
+  const listName = req.body.list;
+  const newItem = new Item({ name: itemName });
+
+  if (listName === "Today") {
     newItem.save();
     res.redirect("/");
+  } else {
+    List.findOne({ name: listName }, function(err, foundList) {
+      foundList.items.push(newItem);
+      foundList.save();
+      res.redirect("/" + listName);
+    });
   }
 });
 
