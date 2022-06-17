@@ -4,6 +4,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 require("dotenv").config();
 const mongoose = require("mongoose");
+const _ = require("lodash");
 
 // Setting module imports for use.
 
@@ -63,7 +64,7 @@ app.get("/about", function(req, res) {
 });
 
 app.get("/:listName", function(req, res) {
-  const listName = req.params.listName;
+  const listName = _.capitalize(req.params.listName);
 
   List.findOne({ name: listName }, function(err, foundList) {
     if (!err) {
@@ -90,7 +91,7 @@ app.get("/:listName", function(req, res) {
 
 app.post("/", function(req, res) {
   const itemName = req.body.newItem;
-  const listName = req.body.list;
+  const listName = _.capitalize(req.body.list);
   const newItem = new Item({ name: itemName });
 
   if (listName === "Today") {
@@ -107,7 +108,7 @@ app.post("/", function(req, res) {
 
 app.post("/delete", function(req, res) {
   const itemID = req.body.checkbox;
-  const listName = req.body.listName;
+  const listName = _.capitalize(req.body.listName);
 
   if (listName === "Today") {
     Item.findByIdAndRemove(itemID, handleError);
