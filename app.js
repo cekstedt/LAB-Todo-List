@@ -3,7 +3,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 require("dotenv").config();
-const date = require(__dirname + "/date.js");
 const mongoose = require("mongoose");
 
 // Setting module imports for use.
@@ -29,7 +28,7 @@ const Item = mongoose.model("Item", itemsSchema);
 
 app.get("/", function(req, res) {
   res.render("list", {
-    listTitle: date.getDate(),
+    listTitle: "Today",
     listItems: items
   });
 });
