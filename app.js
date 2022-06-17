@@ -21,21 +21,27 @@ const itemsSchema = new mongoose.Schema({
 });
 const Item = mongoose.model("Item", itemsSchema);
 
-// const item1 = new Item({ name: "Welcome to your Todo List!" });
-// const item2 = new Item({ name: "Hit the + button to add a new item." });
-// const item3 = new Item({ name: "<-- Hit this to delete an item." });
-// const defaultItems = [item1, item2, item3];
-// Item.insertMany(defaultItems, handleError);
 
 
 // Get routes.
 
 app.get("/", function(req, res) {
-  Item.find({}, function(err, result) {
-    res.render("list", {
-      listTitle: "Today",
-      listItems: result
-    });
+  Item.find({}, function(err, foundItems) {
+    if (err) {
+      console.log(err);
+    } else {
+      if (foundItems.length === 0) {
+        const item1 = new Item({ name: "Welcome to your Todo List!" });
+        const item2 = new Item({ name: "Hit the + button to add a new item." });
+        const item3 = new Item({ name: "<-- Hit this to delete an item." });
+        foundItems = [item1, item2, item3];
+        Item.insertMany(foundItems, handleError);
+      }
+      res.render("list", {
+        listTitle: "Today",
+        listItems: foundItems
+      });
+    }
   });
 });
 
@@ -57,7 +63,8 @@ app.post("/", function(req, res) {
     workItems.push(req.body.newItem);
     res.redirect("/work");
   } else {
-    items.push(req.body.newItem);
+    const newItem = new Item({ name: req.body.newItem });
+    newItem.save();
     res.redirect("/");
   }
 });
