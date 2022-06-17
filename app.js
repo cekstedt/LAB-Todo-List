@@ -106,8 +106,22 @@ app.post("/", function(req, res) {
 });
 
 app.post("/delete", function(req, res) {
-  Item.findByIdAndRemove(req.body.checkbox, handleError);
-  res.redirect("/");
+  const itemID = req.body.checkbox;
+  const listName = req.body.listName;
+
+  if (listName === "Today") {
+    Item.findByIdAndRemove(itemID, handleError);
+    res.redirect("/");
+  } else {
+    List.findOneAndUpdate({
+        name: listName
+      }, { $pull: { items: { _id: itemID } } },
+      function(err, foundList) {
+        if (!err) {
+          res.redirect("/" + listName);
+        }
+      });
+  }
 });
 
 // Initialize server.
