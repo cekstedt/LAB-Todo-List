@@ -35,26 +35,27 @@ const defaultList = [item1, item2, item3];
 
 // Get routes.
 
+// Bug fix: Causing duplicate data in database.
+app.get("/favicon.ico", (req, res) => {
+  res.sendStatus(404);
+});
+
 app.get("/", function(req, res) {
   Item.find({}, function(err, foundItems) {
     if (err) {
       console.log(err);
     } else {
       if (foundItems.length === 0) {
-        foundItems = defaultList;
-        Item.insertMany(foundItems, handleError);
+        Item.insertMany(defaultList, handleError);
+        res.redirect("/");
+      } else {
+        res.render("list", {
+          listTitle: "Today",
+          listItems: foundItems
+        });
       }
-      res.render("list", {
-        listTitle: "Today",
-        listItems: foundItems
-      });
     }
   });
-});
-
-// Bug fix: Causing duplicate data in database.
-app.get("/favicon.ico", (req, res) => {
-  res.sendStatus(404);
 });
 
 app.get("/about", function(req, res) {
