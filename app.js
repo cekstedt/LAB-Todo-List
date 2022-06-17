@@ -69,6 +69,11 @@ app.post("/", function(req, res) {
   }
 });
 
+app.post("/delete", function(req, res) {
+  Item.findByIdAndRemove(req.body.checkbox, handleError);
+  res.redirect("/");
+});
+
 // Initialize server.
 
 app.listen(port, function() {
