@@ -17,5 +17,7 @@
     "mongodb",
     "mongoose",
     "lodash"
-  ]
+  ],
+  "status": "complete",
+  "priority": "done"
 }

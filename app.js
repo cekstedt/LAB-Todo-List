@@ -12,7 +12,7 @@ const app = express();
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
-mongoose.connect("mongodb+srv://cekstedt:" + process.env.MONGO_PW + "@cluster0.13jgzo4.mongodb.net/todolistDB");
+mongoose.connect(process.env.MONGO_URI);
 
 // Global variables.
 
